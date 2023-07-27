@@ -1,0 +1,1 @@
+{"name":"Local: 2_test","url":"c:\\Users\\Asus\\Desktop\\Code_ground\\cp templates\\2_test.cpp","tests":[{"id":1689953062330,"input":"7\n1 2\n1 3\n2 6\n3 4\n3 5\n4 7","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\Asus\\Desktop\\Code_ground\\cp templates\\2_test.cpp","group":"local","local":true}
