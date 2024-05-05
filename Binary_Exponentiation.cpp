@@ -1,35 +1,65 @@
-#include<bits/stdc++.h>
-using namespace std;
-#define int long long 
-#define ar array
-const int M=1e9+7;
-const int N=3e5+5;
- 
-int32_t main(){
- 
-ios_base::sync_with_stdio(false);
-cin.tie(NULL);
-
-vector<int>fact(N);
-fact[0]=1;
-
-for(int i=1;i<N;i++)
-fact[i]=fact[i-1]*i%M;
-
-auto P=[&](int a,int b){
-    int res=1;
-
-    while(b){
-        if(b&1)
-        res=res*a%M;
-        a=a*a%M;
-        b=b>>1;
+class Solution {
+    fun sumOfPower(nums: IntArray, k: Int): Int {
+        
+        
+        val n=nums.size
+        val M=1000000007
+        
+        val a = nums.toTypedArray()
+        
+        
+        val dp=Array(n+1){ Array(n+1){ LongArray(k+1)}}
+        
+        
+        for(i in 0..n){
+            for(j in 0..n){
+                for(sum in 0..k){
+                    
+                    if(j==0 && sum==0){
+                        dp[i][j][sum]=1;
+                        continue;
+                    }
+                    
+                    if(i==0 || j==0 || sum==0){
+                        dp[i][j][sum]=0;
+                        continue;
+                    }
+                    
+                    dp[i][j][sum]=dp[i-1][j][sum]
+                    
+                    if(sum-a[i-1]>=0)
+                    dp[i][j][sum]+=dp[i-1][j-1][sum-a[i-1]]
+                    
+                    dp[i][j][sum]=dp[i][j][sum]%M
+                }
+            }
+        }
+        
+        var ans:Long = 0
+        
+        fun P( a:Long, b:Long):Long{
+            var res:Long = 1
+            var aa =a 
+            var bb =b
+            
+            while(bb > 0){
+                if(bb and 1 == 1L)
+                res = res*aa%M
+                aa=aa*aa%M
+                bb = bb shr 1
+            }
+            
+            return res
+        }
+        
+        for(i in 0..n){
+         val cnt = dp[n][i][k]
+            val cur=cnt*P(2,(n-i).toLong())%M
+            ans+=cur
+            ans%=M
+            
+        }
+        
+        return ans.toInt()
     }
-    return res;
-};
-
-auto MI=[&](int a){
-    return P(a,M-2);
-};
-}
 }

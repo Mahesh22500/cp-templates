@@ -48,3 +48,6 @@ for(int i=1;i<=n;i++)
 cout<<min_d[i]<<" ";
 }
 
+
+int s=mp[]
+

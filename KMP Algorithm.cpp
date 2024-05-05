@@ -11,17 +11,28 @@ int32_t main(){
 ios_base::sync_with_stdio(false);
 cin.tie(NULL);
 
+//No of occurences of a string in a text
+
+string t;
+cin>>t;
+
+
 
 string s;
 cin>>s;
 
-int n=s.size();
+int n=t.size();
+int m=s.size();
 
-vector<int>pi(n);
+
+string S=s+'#'+t;
+int N=S.size();
+
+vector<int>pi(N);
 
 pi[0]=0;
 
-for(int i=1;i<n;i++){
+for(int i=1;i<N;i++){
     int j=pi[i-1];
 
     while(j!=1 && s[j]!=s[j])
@@ -34,7 +45,12 @@ for(int i=1;i<n;i++){
     }
 }
 
-for(int i=0;i<n;i++)
-cout<<pi[i]<<" ";
-cout<<"\n";
+int cnt=0;
+
+for(int i=m+1;i<N;i++){
+    if(p[i]==m)
+    cnt++;
+}
+
+cout<<cnt<<"\n";
 }

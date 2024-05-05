@@ -1,51 +1,72 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-#define int long long 
-#define ar array
-const int M=1e9+7;
-const int N=3e5+5;
- 
-int32_t main(){
- 
-ios_base::sync_with_stdio(false);
-cin.tie(NULL);
 
+bool check(string &str, int mid, char a)
+{
 
-int n,m;
-cin>>n>>m;
+    int n = str.size();
 
-vector<vector<int>>a(n,vector<int>(m));
-for(int i=0;i<n;i++)
-for(int j=0;j<m;j++)
-cin>>a[i][j];
+    int previous = -1, i;
 
-vector<vector<int>>bit(n,vector<int>(m));
+    for (i = 0; i < n; ++i)
+    {
 
+        if (str[i] == a)
+        {
 
-auto sum=[&](int x,int y){
-int res=0;
-for(int i=x;i>=0;i=(i&(i+1))-1){
-    for(int j=y;j>=0;j=(j&(j+1))-1)
-    res+=bit[i][j];
-}
-return res;
-};
+            if (i - previous > mid)
+            {
+                return false;
+            }
+            previous = i;
+        }
+    }
 
-auto add=[&](int x,int y,int v){
-for(int i=x;i<n;i=i|(i+1))
-for(int j=y;j<m;j=j|(j+1))
-bit[i][j]+=v;
-};
-
-auto query=[&](int x1,int y1,int x2,int y2){
-    return sum(x2,y2)-(y1-1>=0?sum(x2,y1-1):0)-(x1-1>=0?sum(x1-1,y2):0)+(x1-1>=0 && y1-1>=0?sum(x1-1,y1-1):0);
-};
-
-for(int i=0;i<n;i++){
-    for(int j=0;j<m;j++){
-        add(i,j,a[i][j]);
-}
+    if (i - previous > mid)
+        return false;
+    else
+        return true;
 }
 
-cout<<query(0,0,1,1);
+bool possible(string &str, int mid)
+{
+
+    for (int i = 0; i < 26; ++i)
+    {
+
+        if (check(str, mid, i + 'a'))
+            return true;
+    }
+
+    return false;
+}
+
+int findMinLength(string &str)
+{
+
+    int low = 1, high = str.length();
+
+    while (low <= high)
+    {
+
+        int mid = (low + high) / 2;
+
+        if (possible(str, mid))
+            high = mid - 1;
+        else
+            low = mid + 1;
+    }
+
+    return high + 1;
+}
+
+int main()
+{
+
+    string str;
+    cin >> str;
+
+   
+        cout << findMinLength(str);
+    return 0;
 }

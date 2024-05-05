@@ -9,59 +9,34 @@ const int P1 =7919;
 
 
 
-int32_t main()
+int32_t main(){
     
 ios_base::sync_with_stdio(false);
 cin.tie(NULL);
 
-int n,m;
-cin>>n>>m;
 
+int n;
+cin>>n;
 
-vector<ar<int,3>>edges;
+vector<int>a(n);
 
-for(int i=0;i<m;i++){
-cin>>u>>v>>w;
-int u,v,w;
-edges.push_back({u,v,w});
-}
-
-
-auto cmp=[&](ar<int,3>a,ar<int,3>b){
-    return a[2]<b[2];
-};
-
-sort(edges.begin(),edges.end(),cmp);
-
-
-
-
-vector<int>par(n+1);
-for(int i=1;i<=n;i++)
-par[i]=i;
-
-function<int(int)> find=[&](int u){
-    if(par[u]==u)
-    return u;
-    return par[u]=find(par[u]);
-};
-
-function<void(int,int)> unite=[&](int u,int v){
-    par[u]=v;
-};
+for(int i=0;i<n;i++)
+cin>>a[i];
 
 int ans=0;
-for(auto [u,v,w]:edges){
-    u=find(u);
-    v=find(v);
-    if(u==v)
-    continue;
-    
-    ans+=w;
-    unite(u,v);
+
+for(auto x:a){
+    int mn=10;
+
+    while(x){
+        mn=min(mn,x%10);
+        x/=10;
+    }
+
+    ans+=mn;
 }
-cout<<ans<<"\n";
 
-
+cout<<ans;
+}
 
 

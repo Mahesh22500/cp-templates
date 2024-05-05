@@ -17,26 +17,26 @@ vector<int>a(n);
  
 for(int i=0;i<n;i++)
 cin>>a[i];
- 
-vector<vector<int>>st(n,vector<int>(21));
- 
-for(int i=0;i<n;i++)
-st[i][0]=a[i];
- 
-for(int k=1;k<=20;k++){
-    for(int i=0;i+(1<<k)-1<n;i++){
-        st[i][k]=min(st[i][k-1],st[i+(1<<(k-1))][k-1]);
-     
+    
+    vector<vector<int>>st(n,vector<int>(21));
+    
+    for(int i=0;i<n;i++)
+    st[i][0]=a[i];
+    
+    for(int k=1;k<=20;k++){
+        for(int i=0;i+(1<<k)-1<n;i++){
+            st[i][k]=min(st[i][k-1],st[i+(1<<(k-1))][k-1]);
+        
+        }
     }
-}
 
-auto query=[&](int a,int b){
-    a--,b--;
-    int dx=(b-a);
-int k=floor(log2(dx));
-int ans=min(st[a][k],st[b-(1<<k)+1][k]);
-return ans;
-};
+    auto query=[&](int a,int b){
+        a--,b--;
+        int dx=(b-a);
+    int k=floor(log2(dx));
+    int ans=min(st[a][k],st[b-(1<<k)+1][k]);
+    return ans;
+    };
  
 while(q--){
 int a,b;
