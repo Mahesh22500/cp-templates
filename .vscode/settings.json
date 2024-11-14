@@ -2,6 +2,19 @@
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
         "utility": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp",
+        "exception": "cpp",
+        "ios": "cpp",
+        "istream": "cpp",
+        "iterator": "cpp",
+        "memory": "cpp",
+        "ostream": "cpp",
+        "streambuf": "cpp",
+        "tuple": "cpp",
+        "xiosbase": "cpp",
+        "initializer_list": "cpp",
+        "type_traits": "cpp"
     }
 }

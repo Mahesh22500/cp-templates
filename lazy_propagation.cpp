@@ -64,6 +64,7 @@ int32_t main()
                 lazy[2 * si + 2] += x;
                 return;
             }
+        }
 
             int m = (l + r) / 2;
 

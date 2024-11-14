@@ -2,7 +2,7 @@
 using namespace std;
 #define ll long long 
  
-const int N=1e3+5;
+const int N=1e3+5;s
 char grid[N][N];
 int a[N][N];
 int p[N][N];
@@ -29,9 +29,7 @@ for(int i=0;i<n;i++){
     }
 }
 
-auto get=[&](int i1,int j1,int i2,int j2){
-    return p[i2][j2]-(j1-1>=0?p[i2][j1-1]:0)-(i1-1>=0?p[i1-1][j2]:0)+(i1-1>=0 && j1-1>=0?p[i1-1][j1-1]:0);
-};
+
 
 
     while(q--){

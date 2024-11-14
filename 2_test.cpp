@@ -1,72 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define int long long
 
-struct edge
+int32_t main()
 {
-    int u, v, w;
-    bool operator<(const edge &rhs) const
+
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+
+    for (int i = 0; i < n; i++)
+        cin >> a[i];
+
+    const int N = 1e5 + 5;
+
+    vector<int> cnt(N);
+
+    for (auto x : a)
+        cnt[x]++;
+
+    vector<long long> dp(N);
+
+    dp[0] = 0;
+
+    for (int i = 1; i < N; i++)
     {
-        return w > rhs.w;
+        dp[i] = (dp[i - 1] + 1) * cnt[i];
     }
-};
 
-vector<int> parent, rank_;
+    long long ans = 0;
 
-int find(int i)
-{
-    if (i != parent[i])
-        parent[i] = find(parent[i]);
-    return parent[i];
+    for (int i = 1; i < N; i++)
+        ans += dp[i];
+
+    cout << ans << "\n";
 }
 
-void union_set(int i, int j)
-{
-    int ri = find(i), rj = find(j);
-    if (ri != rj)
-    {
-        if (rank_[ri] > rank_[rj])
-            swap(ri, rj);
-        parent[ri] = rj;
-        if (rank_[ri] == rank_[rj])
-            rank_[rj]++;
-    }
-}
 
-int main()
-{
-    int n, m;
-    cin >> n >> m;
-    vector<int> cost(n);
-    for (int i = 0; i < n; i++)
-        cin >> cost[i];
-    vector<edge> edges(m);
-    for (int i = 0; i < m; i++)
-    {
-        cin >> edges[i].u >> edges[i].v >> edges[i].w;
-        edges[i].u--;
-        edges[i].v--;
-    }
-    parent.resize(n);
-    rank_.resize(n);
-    for (int i = 0; i < n; i++)
-        parent[i] = i;
-    priority_queue<edge> pq;
-    for (int i = 0; i < n; i++)
-        for (int j = i + 1; j < n; j++)
-            pq.push({i, j, cost[i] + cost[j]});
-    for (auto &e : edges)
-        pq.push(e);
-    int total_cost = 0;
-    while (!pq.empty())
-    {
-        edge e = pq.top();
-        pq.pop();
-        if (find(e.u) != find(e.v))
-        {
-            total_cost += e.w;
-            union_set(e.u, e.v);
-        }
-    }
-    cout << total_cost << endl;
-    return 0;
-}
+function getCatcheSize(ve)

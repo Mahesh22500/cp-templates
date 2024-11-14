@@ -1,107 +1,210 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define int long long
 
-const int N = 2e5 + 5;
-
-struct T
+class MergeSortTree
 {
-   int h;
-   int m;
+
+	int n;
+	vector<int> a;
+
+	vector<vector<int>> st;
+
+public:
+	MergeSortTree(vector<int> &b)
+	{
+
+		this->n = b.size();
+
+		this->a = b;
+
+		st.resize(4 * n + 5);
+
+		build(0, 0, n - 1);
+	}
+
+	void build(int si, int l, int r)
+	{
+
+		if (l == r)
+		{
+			st[si].push_back(a[l]);
+			return;
+		}
+
+		int m = (l + r) / 2;
+
+		build(2 * si + 1, l, m);
+		build(2 * si + 2, m + 1, r);
+
+		auto &a = st[2 * si + 1];
+		auto &b = st[2 * si + 2];
+
+		vector<int> c;
+
+		int i = 0, j = 0;
+
+		while (i < a.size() && j < b.size())
+		{
+			if (a[i] < b[j])
+				c.push_back(a[i++]);
+			else
+				c.push_back(b[j++]);
+		}
+
+		while (i < a.size())
+			c.push_back(a[i++]);
+
+		while (j < b.size())
+			c.push_back(b[j++]);
+
+		st[si] = c;
+	}
+
+	int query(int si, int l, int r, int ql, int qr, int x)
+	{
+
+		if (l >= ql && r <= qr)
+		{
+
+			int res = 0;
+
+			// less than
+
+			int cnt = lower_bound(st[si].begin(), st[si].end(), x) - st[si].begin();
+
+			// greater than or equal to
+
+			return (r - l + 1 - cnt);
+		}
+
+		if (l > qr || r < ql)
+			return 0LL;
+
+		int m = (l + r) / 2;
+
+		int left = query(2 * si + 1, l, m, ql, qr, x);
+		int right = query(2 * si + 2, m + 1, r, ql, qr, x);
+
+		return left + right;
+	}
+
+	int query(int l, int r, int x)
+	{
+		return query(0, 0, n - 1, l, r, x);
+	}
 };
+
+
+vector<int> getCacheSize(vector<vector<int>>data,vector<int>queries){
+
+	int n = data.size();
+
+	int q = queries.size();
+
+	vector<pair<int,int>>v(n);
+
+	for(int i=0;i<n;i++){
+		v[i] = {data[i][0],data[i][0]+data[i][1]};
+	}
+
+
+	sort(v.begin(),v.end());
+
+	vector<int> l(n), r(n);
+
+	for (int i = 0; i < n; i++)
+	{
+		l[i] = v[i].first;
+		r[i] = v[i].second;
+	}
+
+	vector<int> ans;
+
+	MergeSortTree st(r);
+
+	for(int i=0;i<q;i++)
+	{
+
+		int x = queries[i];
+
+		int L = upper_bound(l.begin(), l.end(), x) - l.begin();
+
+		if (L == 0)
+		{
+			ans.push_back(0);
+			continue;
+		}
+
+		L--;
+
+		int res = st.query(0, L, x);
+
+		ans.push_back(res);
+	}
+
+
+	return ans;
+
+	
+}
 
 int32_t main()
 {
 
-   vector<pair<T, T>> intervals;
+	int n;
+	cin >> n;
 
-   int n;
-   cin >> n;
+	int q;
+	cin >> q;
 
-   auto cmp = [&](pair<T, T> t1, pair<T, T> t2)
-   {
-      if (t1.first.h == t2.first.h)
-         return t1.first.m < t2.first.m;
-      else
-         return t1.first.h < t2.first.h;
-   };
+	vector<pair<int, int>> v(n);
 
-   for (int i = 0; i < n; i++)
-   {
-      string s;
-      cin >> s;
+	for (int i = 0; i < n; i++)
+	{
 
-      T t1, t2;
+		int l, x;
+		cin >> l >> x;
 
+		v[i] = {l, l + x};
+	}
 
-      t1.h = (s[0] - '0') * 10 + (s[1] - '0');
-      t1.m = (s[3] - '0') * 10 + (s[4] - '0');
-      if (s[5] == 'P')
-      { 
-         t1.h%=12;
-         t1.h += 12;
-      }
+	sort(v.begin(), v.end());
 
+	vector<int> l(n), r(n);
 
-      t2.h = (s[0 + 8] - '0') * 10 + (s[1 + 8] - '0');
-      t2.m = (s[3 + 8] - '0') * 10 + (s[4 + 8] - '0');
-      // t2.AM = (s[5+8] == 'A' ? true:false);
-      if (s[5 + 8] == 'P')
-         t2.h += 12;
+	for (int i = 0; i < n; i++)
+	{
+		l[i] = v[i].first;
+		r[i] = v[i].second;
+	}
 
-      intervals.push_back({t1, t2});
-   }
-   sort(intervals.begin(), intervals.end(), cmp);
+	vector<int> ans;
 
+	MergeSortTree st(r);
 
+	while (q--)
+	{
 
-   auto calcDif = [&](T t1, T t2)
-   {
-      if (t1.h > t2.h || (t1.h == t2.h && t1.m > t2.m))
-      {
-         T res;
-         res.h = 0, res.m = 0;
-         return res;
-      }
+		int x;
+		cin >> x;
 
-      T res;
+		int L = upper_bound(l.begin(), l.end(), x) - l.begin();
 
-      if (t1.m > t2.m)
-      {
-         t2.h -= 1;
-         t2.m += 60;
-      }
+		if (L == 0)
+		{
+			ans.push_back(0);
+			continue;
+		}
 
-      res.m = t2.m - t1.m;
-      res.h = t2.h - t1.h;
+		L--;
 
-      return res;
-   };
+		int res = st.query(0, L, x);
 
-   T res = {0, 0};
+		ans.push_back(res);
+	}
 
-   auto Max = [&](T t1, T t2)
-   {
-      if (t1.h != t2.h)
-      {
-         if (t1.h < t2.h)
-            return t2;
-         return t1;
-      }
-      {
-         if (t1.m < t2.m)
-            return t2;
-         return t1;
-      }
-   };
-
-   for (int i = 1; i < n; i++)
-   {
-      auto t1 = intervals[i - 1].second;
-      auto t2 = intervals[i].first;
-
-      T d = calcDif(t1, t2);
-      res = Max(res, d);
-   }
-  
-   cout << res.h << " " << res.m << "\n";
+	for (auto x : ans)
+		cout << x << " ";
+	cout << "\n";
 }
